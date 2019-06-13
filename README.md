@@ -8,7 +8,7 @@ A boilerplate NextJS with Redux and Material UI
 
 Cloning the project.
 ```
-git https://github.com/joaopaulomoraes/nextjs-with-redux-and-material-ui.git nextjs-with-redux-and-material-ui
+git clone https://github.com/joaopaulomoraes/nextjs-with-redux-and-material-ui.git nextjs-with-redux-and-material-ui
 ```
 
 Access the project directory.
