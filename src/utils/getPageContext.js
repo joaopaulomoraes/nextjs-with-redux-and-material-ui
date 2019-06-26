@@ -1,8 +1,6 @@
 import { SheetsRegistry } from 'jss'
-import {
-  createMuiTheme,
-  createGenerateClassName
-} from '@material-ui/core/styles'
+import { createGenerateClassName } from '@material-ui/styles'
+import { createMuiTheme } from '@material-ui/core/styles'
 
 const theme = createMuiTheme({
   typography: {
@@ -13,7 +11,6 @@ const theme = createMuiTheme({
 const createPageContext = () => {
   return {
     theme,
-    sheetsManager: new Map(),
     sheetsRegistry: new SheetsRegistry(),
     generateClassName: createGenerateClassName()
   }

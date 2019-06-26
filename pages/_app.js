@@ -3,11 +3,17 @@ import App, { Container } from 'next/app'
 import Head from 'next/head'
 import withRedux from 'next-redux-wrapper'
 import { Provider } from 'react-redux'
-import { MuiThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@material-ui/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import JssProvider from 'react-jss/lib/JssProvider'
+import { create } from 'jss';
+import { StylesProvider, jssPreset } from '@material-ui/styles';
+import rtl from 'jss-rtl'
 import store from '../src/store'
 import getPageContext from '../src/utils/getPageContext'
+
+const jss = create({
+  plugins: [...jssPreset().plugins, rtl()],
+})
 
 const _App = withRedux(store)(
   class _App extends App {
@@ -40,13 +46,9 @@ const _App = withRedux(store)(
           <Head>
             <title>NextJS - With Redux and Material UI</title>
           </Head>
-          <JssProvider
-            registry={this.pageContext.sheetsRegistry}
-            generateClassName={this.pageContext.generateClassName}
-          >
-            <MuiThemeProvider
+          <StylesProvider jss={jss}>
+            <ThemeProvider
               theme={this.pageContext.theme}
-              sheetsManager={this.pageContext.sheetsManager}
             >
               <CssBaseline />
               <Provider store={store}>
@@ -55,8 +57,8 @@ const _App = withRedux(store)(
                   {...pageProps}
                 />
               </Provider>
-            </MuiThemeProvider>
-          </JssProvider>
+            </ThemeProvider>
+          </StylesProvider>
         </Container>
       )
     }
