@@ -17,9 +17,6 @@ const styles = theme => ({
   },
   title: {
     fontSize: 14
-  },
-  card: {
-    textAlign: 'left'
   }
 })
 
