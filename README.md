@@ -43,3 +43,9 @@ To pass the initial state from the server to the client, we pass as a prop calle
 The trick here to support the universal redux is to separate the cases for the client and the server. When we are on the server, we want to create a new store every time, otherwise the data from the different users will be mixed. If we are on the customer, we always want to use the same store. This is what we do in `store.js`
 
 Again, the first render is happening in the server and instead of starting the count at 0, it will dispatch an action in redux that starts the count at 1. This continues to highlight how each navigation triggers a server render first and then a client render second, when you navigate between pages.
+
+---
+
+## License
+
+[![CC0](http://mirrors.creativecommons.org/presskit/buttons/88x31/svg/cc-zero.svg)](http://creativecommons.org/publicdomain/zero/1.0/)
