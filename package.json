@@ -11,7 +11,7 @@
     "react": "16.8.0",
     "react-dom": "16.8.0",
     "react-jss": "10.0.0-alpha.21",
-    "react-redux": "6.0.0",
+    "react-redux": "7.1.0",
     "redux": "4.0.1",
     "redux-thunk": "2.3.0"
   },
