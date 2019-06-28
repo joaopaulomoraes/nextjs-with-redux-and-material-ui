@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import React from 'react'
+import { makeStyles } from '@material-ui/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import { connect } from 'react-redux'
 import { increment, decrement } from '../src/actions'
 
-const styles = theme => ({
+const useStyles = makeStyles({
   container: {
     display: 'flex',
     flexWrap: 'wrap'
@@ -20,60 +20,56 @@ const styles = theme => ({
   }
 })
 
-class Index extends PureComponent {
-  static getInitialProps ({ store, isServer }) {
-    store.dispatch(increment(isServer))
+const Index = (props) => {
+  const {
+    counter,
+    increment,
+    decrement
+  } = props
 
-    return { isServer }
-  }
+  const classes = useStyles()
 
-  handleIncrement = () => {
-    this.props.increment()
-  }
+  return (
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography
+          className={classes.title}
+          color='textSecondary'
+          gutterBottom
+        >
+          Dispatched from <b>{counter.from}</b>
+        </Typography>
+        <Typography variant='h3' component='h2'>
+          {counter.value}
+        </Typography>
+        <Typography color='textSecondary'>{counter.action}</Typography>
+      </CardContent>
+      <CardActions>
+        <Fab
+          variant='round'
+          color='primary'
+          size='small'
+          onClick={() => increment()}
+        >
+          <AddIcon />
+        </Fab>
+        <Fab
+          variant='round'
+          color='secondary'
+          size='small'
+          onClick={() => decrement()}
+        >
+          <RemoveIcon />
+        </Fab>
+      </CardActions>
+    </Card>
+  )
+}
 
-  handleDecrement = () => {
-    this.props.decrement()
-  }
+Index.getInitialProps = ({ store, isServer }) => {
+  store.dispatch(increment(isServer))
 
-  render () {
-    const { classes, counter } = this.props
-
-    return (
-      <Card className={classes.card}>
-        <CardContent>
-          <Typography
-            className={classes.title}
-            color='textSecondary'
-            gutterBottom
-          >
-            Dispatched from <b>{counter.from}</b>
-          </Typography>
-          <Typography variant='h3' component='h2'>
-            {counter.value}
-          </Typography>
-          <Typography color='textSecondary'>{counter.action}</Typography>
-        </CardContent>
-        <CardActions>
-          <Fab
-            variant='round'
-            color='primary'
-            size='small'
-            onClick={this.handleIncrement}
-          >
-            <AddIcon />
-          </Fab>
-          <Fab
-            variant='round'
-            color='secondary'
-            size='small'
-            onClick={this.handleDecrement}
-          >
-            <RemoveIcon />
-          </Fab>
-        </CardActions>
-      </Card>
-    )
-  }
+  return { isServer }
 }
 
 const mapStateToProps = state => {
@@ -90,4 +86,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(Index))
+)(Index)
