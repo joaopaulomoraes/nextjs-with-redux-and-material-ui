@@ -1,6 +1,6 @@
 {
   "name": "with-redux-wrapper-and-material-ui",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "dependencies": {
     "@material-ui/core": "latest",
     "@material-ui/icons": "latest",
