@@ -10,7 +10,8 @@
     "react-dom": "^16.8.0",
     "react-redux": "6.0.0",
     "redux": "4.0.1",
-    "redux-thunk": "2.3.0"
+    "redux-thunk": "2.3.0",
+    "@material-ui/styles": "latest"
   },
   "scripts": {
     "dev": "next",

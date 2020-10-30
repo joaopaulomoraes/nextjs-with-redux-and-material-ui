@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/styles'
+import makeStyles  from '@material-ui/styles/makeStyles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -9,6 +9,8 @@ import RemoveIcon from '@material-ui/icons/Remove'
 import Typography from '@material-ui/core/Typography'
 import { connect } from 'react-redux'
 import { increment, decrement } from '../src/actions'
+import {bindActionCreators} from "redux";
+import {INCREMENT} from "../src/constants";
 
 const useStyles = makeStyles({
   container: {
@@ -22,34 +24,36 @@ const useStyles = makeStyles({
 
 const Index = (props) => {
   const {
-    counter,
-    increment,
-    decrement
+    value,
+      from,
+      action
   } = props
-
+const {
+  increment:inc,
+  decrement:dec
+}=props.actions
   const classes = useStyles()
-
   return (
-    <Card className={classes.card}>
+  <Card className={classes.card}>
       <CardContent>
         <Typography
           className={classes.title}
           color='textSecondary'
           gutterBottom
         >
-          Dispatched from <b>{counter.from}</b>
+          Dispatched from <b>{from}</b>
         </Typography>
         <Typography variant='h3' component='h2'>
-          {counter.value}
+          {value}
         </Typography>
-        <Typography color='textSecondary'>{counter.action}</Typography>
+        <Typography color='textSecondary'>{action}</Typography>
       </CardContent>
       <CardActions>
         <Fab
           variant='round'
           color='primary'
           size='small'
-          onClick={() => increment()}
+          onClick={() => inc()}
         >
           <AddIcon />
         </Fab>
@@ -57,7 +61,7 @@ const Index = (props) => {
           variant='round'
           color='secondary'
           size='small'
-          onClick={() => decrement()}
+          onClick={() => dec()}
         >
           <RemoveIcon />
         </Fab>
@@ -65,25 +69,20 @@ const Index = (props) => {
     </Card>
   )
 }
-
+// only required to make changes on the server side, can be removed
 Index.getInitialProps = ({ store, isServer }) => {
-  store.dispatch(increment(isServer))
+  store.dispatch({
+    type: INCREMENT,
+    from: isServer ? 'server' : 'client'
+  })
 
   return { isServer }
 }
 
-const mapStateToProps = state => {
-  return {
-    counter: state
-  }
-}
-
-const mapDispatchToProps = dispatch => ({
-  increment: () => dispatch(increment()),
-  decrement: () => dispatch(decrement())
-})
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  state=>{
+    return {...state}
+  },
+    (dispatch=>({actions:bindActionCreators({increment,decrement},dispatch)}))
 )(Index)

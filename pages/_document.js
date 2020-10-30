@@ -2,11 +2,12 @@ import React, { Fragment } from 'react'
 import Document, { Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/styles'
 import theme from '../src/utils/theme'
+import {Html} from "next/document";
 
 class _Document extends Document {
   render () {
     return (
-      <html lang='pt-BR' dir='ltr'>
+      <Html lang='pt-BR' dir='ltr'>
         <Head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no" />
@@ -17,7 +18,7 @@ class _Document extends Document {
           <Main />
           <NextScript />
         </body>
-      </html>
+      </Html>
     )
   }
 }
@@ -27,7 +28,8 @@ _Document.getInitialProps = async ctx => {
   const originalRenderPage = ctx.renderPage
 
   ctx.renderPage = () => originalRenderPage({
-    enhanceApp: WrappedComponent => props => sheets.collect(<WrappedComponent {...props} />)
+    //Wrap app inside sss
+    enhanceApp: App => props => sheets.collect(<App {...props} />)
   })
 
   const initialProps = await Document.getInitialProps(ctx)
