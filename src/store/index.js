@@ -1,14 +1,17 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
-import { counter } from '../reducers'
+import { createWrapper } from 'next-redux-wrapper'
+import { counter, initialState } from '../reducers'
 
-const store = initialState => {
+const makeStore = () => {
+  const composeEnhancers = process.env.NODE_ENV !== 'production' ? composeWithDevTools : compose
+
   return createStore(
     counter,
     initialState,
-    composeWithDevTools(applyMiddleware(thunk))
+    composeEnhancers(applyMiddleware(thunk))
   )
 }
 
-export default store
+export default createWrapper(makeStore, {debug: true})

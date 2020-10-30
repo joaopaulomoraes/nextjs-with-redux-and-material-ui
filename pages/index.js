@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/styles'
+import makeStyles  from '@material-ui/styles/makeStyles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -9,6 +9,8 @@ import RemoveIcon from '@material-ui/icons/Remove'
 import Typography from '@material-ui/core/Typography'
 import { connect } from 'react-redux'
 import { increment, decrement } from '../src/actions'
+import { bindActionCreators } from 'redux'
+import { INCREMENT } from '../src/constants'
 
 const useStyles = makeStyles({
   container: {
@@ -20,13 +22,15 @@ const useStyles = makeStyles({
   }
 })
 
-const Index = (props) => {
-  const {
-    counter,
+const Index = ({
+  value,
+  from,
+  action,
+  actions: {
     increment,
     decrement
-  } = props
-
+  }
+}) => {
   const classes = useStyles()
 
   return (
@@ -37,12 +41,12 @@ const Index = (props) => {
           color='textSecondary'
           gutterBottom
         >
-          Dispatched from <b>{counter.from}</b>
+          Dispatched from <b>{from}</b>
         </Typography>
         <Typography variant='h3' component='h2'>
-          {counter.value}
+          {value}
         </Typography>
-        <Typography color='textSecondary'>{counter.action}</Typography>
+        <Typography color='textSecondary'>{action}</Typography>
       </CardContent>
       <CardActions>
         <Fab
@@ -66,24 +70,16 @@ const Index = (props) => {
   )
 }
 
-Index.getInitialProps = ({ store, isServer }) => {
-  store.dispatch(increment(isServer))
+Index.getInitialProps = ({ store }) => {
+  store.dispatch({
+    type: INCREMENT,
+    from: 'server'
+  })
 
-  return { isServer }
+  return {}
 }
-
-const mapStateToProps = state => {
-  return {
-    counter: state
-  }
-}
-
-const mapDispatchToProps = dispatch => ({
-  increment: () => dispatch(increment()),
-  decrement: () => dispatch(decrement())
-})
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  state => state,
+  dispatch => ({ actions: bindActionCreators({ increment, decrement }, dispatch) })
 )(Index)
