@@ -9,8 +9,8 @@ import RemoveIcon from '@material-ui/icons/Remove'
 import Typography from '@material-ui/core/Typography'
 import { connect } from 'react-redux'
 import { increment, decrement } from '../src/actions'
-import {bindActionCreators} from "redux";
-import {INCREMENT} from "../src/constants";
+import { bindActionCreators } from 'redux'
+import { INCREMENT } from '../src/constants'
 
 const useStyles = makeStyles({
   container: {
@@ -22,19 +22,19 @@ const useStyles = makeStyles({
   }
 })
 
-const Index = (props) => {
-  const {
-    value,
-      from,
-      action
-  } = props
-const {
-  increment:inc,
-  decrement:dec
-}=props.actions
+const Index = ({
+  value,
+  from,
+  action,
+  actions: {
+    increment,
+    decrement
+  }
+}) => {
   const classes = useStyles()
+
   return (
-  <Card className={classes.card}>
+    <Card className={classes.card}>
       <CardContent>
         <Typography
           className={classes.title}
@@ -53,7 +53,7 @@ const {
           variant='round'
           color='primary'
           size='small'
-          onClick={() => inc()}
+          onClick={() => increment()}
         >
           <AddIcon />
         </Fab>
@@ -61,7 +61,7 @@ const {
           variant='round'
           color='secondary'
           size='small'
-          onClick={() => dec()}
+          onClick={() => decrement()}
         >
           <RemoveIcon />
         </Fab>
@@ -69,20 +69,17 @@ const {
     </Card>
   )
 }
-// only required to make changes on the server side, can be removed
-Index.getInitialProps = ({ store, isServer }) => {
+
+Index.getInitialProps = ({ store }) => {
   store.dispatch({
     type: INCREMENT,
-    from: isServer ? 'server' : 'client'
+    from: 'server'
   })
 
-  return { isServer }
+  return {}
 }
 
-
 export default connect(
-  state=>{
-    return {...state}
-  },
-    (dispatch=>({actions:bindActionCreators({increment,decrement},dispatch)}))
+  state => state,
+  dispatch => ({ actions: bindActionCreators({ increment, decrement }, dispatch) })
 )(Index)

@@ -1,5 +1,5 @@
 import { INCREMENT, DECREMENT } from '../constants'
-import {HYDRATE} from "next-redux-wrapper";
+import { HYDRATE } from 'next-redux-wrapper'
 
 export const initialState = {
   value: 0,
@@ -10,7 +10,11 @@ export const initialState = {
 export const counter = (state = initialState, action) => {
   switch (action.type) {
     case HYDRATE:
-      return {...state, ...action.payload};
+      return {
+        ...state,
+        ...action.payload
+      }
+
     case INCREMENT:
       return {
         ...state,
