@@ -2,6 +2,10 @@
 
 A boilerplate NextJS with Redux and Material UI
 
+
+>***New*** 🎉🎉 Included with [connected-next-router](https://github.com/danielr18/connected-next-router).
+
+
 ## Getting Started
 
 ### Installing

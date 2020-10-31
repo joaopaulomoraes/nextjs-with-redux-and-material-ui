@@ -10,7 +10,8 @@ import Typography from '@material-ui/core/Typography'
 import { connect } from 'react-redux'
 import { increment, decrement } from '../src/actions'
 import {bindActionCreators} from "redux";
-import {INCREMENT} from "../src/constants";
+import Button from "@material-ui/core/Button";
+import {push} from "connected-next-router";
 
 const useStyles = makeStyles({
   container: {
@@ -27,10 +28,11 @@ const Index = (props) => {
     value,
       from,
       action
-  } = props
+  } = props.counter
 const {
   increment:inc,
-  decrement:dec
+  decrement:dec,
+    push
 }=props.actions
   const classes = useStyles()
   return (
@@ -48,6 +50,7 @@ const {
         </Typography>
         <Typography color='textSecondary'>{action}</Typography>
       </CardContent>
+    <Button onClick={()=>push("routeExample")}>Click me</Button>
       <CardActions>
         <Fab
           variant='round'
@@ -70,19 +73,19 @@ const {
   )
 }
 // only required to make changes on the server side, can be removed
-Index.getInitialProps = ({ store, isServer }) => {
-  store.dispatch({
-    type: INCREMENT,
-    from: isServer ? 'server' : 'client'
-  })
-
-  return { isServer }
-}
+// Index.getInitialProps = ({ store, isServer }) => {
+//   store.dispatch({
+//     type: INCREMENT,
+//     from: isServer ? 'server' : 'client'
+//   })
+//
+//   return { isServer }
+// }
 
 
 export default connect(
   state=>{
     return {...state}
   },
-    (dispatch=>({actions:bindActionCreators({increment,decrement},dispatch)}))
+    (dispatch=>({actions:bindActionCreators({increment,decrement,push},dispatch)}))
 )(Index)

@@ -1,8 +1,12 @@
-import {createStore, applyMiddleware, compose} from 'redux'
+import {createStore, applyMiddleware, compose, combineReducers} from 'redux'
 import {composeWithDevTools} from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
-import {createWrapper} from "next-redux-wrapper";
-import {counter, initialState} from "../reducers";
+import {createWrapper, HYDRATE} from "next-redux-wrapper";
+import {counter} from "../reducers";
+import {routerReducer,createRouterMiddleware,initialRouterState} from "connected-next-router";
+import {format} from "url";
+import Router from 'next/router'
+import {initialState} from "../reducers/initialState";
 
 const makeStore = context => {
     let composeEnhancers = compose;
@@ -17,10 +21,34 @@ const makeStore = context => {
         //     sagaMonitor: window.__SAGA_MONITOR_EXTENSION__,
         //   };
     }
+    const middlewares = [thunk,createRouterMiddleware()];
+    const { asPath, pathname, query } = context.ctx || Router.router || {};
+    const combinedReducer = combineReducers({
+        counter: counter,
+        router: routerReducer,
+    })
+    const reducer = (state, action) => {
+        if (action.type === HYDRATE) {
+            const nextState = {
+                ...state, // use previous state
+                ...action.payload, // apply delta from hydration
+            }
+            if (typeof window !== 'undefined' && state?.router) {
+                // preserve router value on client side navigation
+                nextState.router = state.router
+            }
+            return nextState
+        } else {
+            return combinedReducer(state, action)
+        }
+    }
     return createStore(
-        counter,
-        initialState,
-        composeEnhancers(applyMiddleware(thunk))
+        reducer,
+        {
+            ...initialState,
+            router: asPath?initialRouterState(format({ pathname, query }), asPath):null
+        },
+        composeEnhancers(applyMiddleware(...middlewares))
     )
 }
 // create a makeStore function

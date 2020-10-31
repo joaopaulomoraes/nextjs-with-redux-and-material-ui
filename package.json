@@ -4,14 +4,16 @@
   "dependencies": {
     "@material-ui/core": "latest",
     "@material-ui/icons": "latest",
+    "@material-ui/styles": "latest",
+    "connected-next-router": "^3.1.0",
     "next": "latest",
     "next-redux-wrapper": "latest",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "react-redux": "6.0.0",
+    "react-redux": "^7.2.2",
     "redux": "4.0.1",
     "redux-thunk": "2.3.0",
-    "@material-ui/styles": "latest"
+    "url": "^0.11.0"
   },
   "scripts": {
     "dev": "next",
